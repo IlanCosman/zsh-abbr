@@ -1,4 +1,4 @@
-# Dotfiles
+# Zsh-snippets
 Zsh-snippets is an Oh My Zsh plugin to create aliases that expand.
 
 ## Installation
