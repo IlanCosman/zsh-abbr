@@ -2,7 +2,7 @@ typeset -Ag abbreviations
 abbreviations=()
 
 just_alias() {
-  alias $1="$2"
+  alias "$1"="$2"
 } 
 
 just_expansion() {
@@ -15,8 +15,8 @@ just_expansion() {
 }
 
 snippet() {
-  just_alias $1 $2
-  just_expansion $1 $2
+  just_alias "$1" "$2"
+  just_expansion "$1" "$2"
 }
 
 magic-abbrev-expand() {
@@ -33,11 +33,5 @@ magic-abbrev-expand() {
   fi
 }
 
-no-magic-abbrev-expand() {
-  LBUFFER+=' '
-}
-
 zle -N magic-abbrev-expand
-zle -N no-magic-abbrev-expand
 bindkey " " magic-abbrev-expand
-bindkey "^x " no-magic-abbrev-expand
