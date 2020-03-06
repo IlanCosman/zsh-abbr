@@ -1,27 +1,21 @@
 typeset -Ag abbreviations
 abbreviations=()
 
-just_alias() {
+als() {
   alias "$1"="$2"
-} 
+}
 
-just_expansion() {
-  if [[ "$2" == *\^* ]]
-  then
-    abbreviations[$1]="$2"
-  else
-    abbreviations[$1]="$2 ^"
-  fi
+expansion() {
+  abbreviations[$1]="$2 ^"
 }
 
 snippet() {
-  just_alias "$1" "$2"
-  just_expansion "$1" "$2"
+  als "$1" "$2"
+  expansion "$1" "$2"
 }
 
 magic-abbrev-expand() {
   local MATCH
-  TEMP="$LBUFFER"
   SNIPPET=${abbreviations[$LBUFFER]}
 
   if [[ -n "$SNIPPET" ]]
