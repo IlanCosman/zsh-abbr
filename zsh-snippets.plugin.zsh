@@ -1,5 +1,4 @@
 typeset -Ag abbreviations
-abbreviations=()
 
 als() {
   alias "$1"="$2"

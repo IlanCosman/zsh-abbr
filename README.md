@@ -25,10 +25,10 @@ Replacement for traditional alias to provide consistent formatting with the othe
 ### expansion
 
 ```sh
-expansion "syu" "sudo pacman -Syu"
+expansion "s" "sudo"
 ```
 
-Add a new expansion where `syu + Space` will be replaced with `sudo pacman -Syu`.
+Add a new expansion where `s + Space` will be replaced with `sudo`.
 
 ```sh
 expansion "gca" "git commit -am '^'"
@@ -39,9 +39,9 @@ Use a `^` in an expansion to determine where the cursor will be placed after pre
 ### snippet
 
 ```sh
-snippet "gs" "git status"
+snippet "syu" "sudo pacman -Syu"
 ```
 
-Functions as both an alias and an expansion. `Enter` will use `gs` as an alias while `Space` will expand the command into `git status`.
+Functions as both an alias and an expansion. `Enter` will use `syu` as an alias while `Space` will expand the command into `sudo pacman -Syu`.
 
-- Carrots do not function in snippets
+- Carets do not function in snippets
