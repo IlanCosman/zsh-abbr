@@ -1,51 +1,37 @@
-# zsh-snippets
+# zsh-abbr
 
-An Oh My Zsh plugin to create aliases that expand.
+A Fish shell-like [abbr](https://fishshell.com/docs/current/cmds/abbr.html) command for Zsh with extended cursor placement functionality.
 
 ## Installation
 
 1. Clone the repository into the Oh My Zsh custom plugins folder:
 
    ```sh
-   git clone https://github.com/IlanCosman/zsh-snippets $ZSH_CUSTOM/plugins/zsh-snippets
+   git clone https://github.com/IlanCosman/zsh-abbr $ZSH_CUSTOM/plugins/zsh-abbr
    ```
 
-2. Add `zsh-snippets` to the plugins array in your zshrc file:
+2. Add `zsh-abbr` to the plugins array in your zshrc:
 
    ```sh
-   plugins=(... zsh-snippets)
+   plugins=(... zsh-abbr)
    ```
 
-## Commands
-
-### als
+## Examples
 
 ```sh
-als "gaa" "git add -A"
+abbr syu="sudo pacman -Syu"
 ```
 
-Replacement for traditional alias to provide consistent formatting with the other commands.
-
-### expansion
+`Space` will expand `syu` into `sudo pacman -Syu`. `Enter` will expand and then run the command.
 
 ```sh
-expansion "s" "sudo"
+abbr gca="git commit -am '^'"
 ```
 
-Add a new expansion where `s + Space` will be replaced with `sudo`.
+Use a `^` in an abbr to determine where the cursor will be placed after expansion.
 
 ```sh
-expansion "gca" "git commit -am '^'"
+abbr s="sudo ^"
 ```
 
-Use a `^` in an expansion to determine where the cursor will be placed after pressing `Space`.
-
-### snippet
-
-```sh
-snippet "syu" "sudo pacman -Syu"
-```
-
-Functions as both an alias and an expansion. `Enter` will use `syu` as an alias while `Space` will expand the command into `sudo pacman -Syu`.
-
-- Carets do not function in snippets
+Note that using a `^` will cause `Enter` to only expand the command, not run it. This is desirable in cases like the one above, as running `sudo` by itself would return an error.
