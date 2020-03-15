@@ -4,13 +4,17 @@ An Oh My Zsh plugin to create aliases that expand.
 
 ## Installation
 
-Clone the repository into the Oh My Zsh custom plugins folder:
+1. Clone the repository into the Oh My Zsh custom plugins folder:
 
-```sh
-git clone https://github.com/IlanCosman/zsh-snippets ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-snippets
-```
+   ```sh
+   git clone https://github.com/IlanCosman/zsh-snippets $ZSH_CUSTOM/plugins/zsh-snippets
+   ```
 
----
+2. Add `zsh-snippets` to the plugins array in your zshrc file:
+
+   ```sh
+   plugins=(... zsh-snippets)
+   ```
 
 ## Commands
 

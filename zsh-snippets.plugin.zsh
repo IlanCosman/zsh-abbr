@@ -1,4 +1,4 @@
-typeset -Ag abbreviations
+typeset -A abbreviations
 
 als() {
   alias "$1"="$2"
