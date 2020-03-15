@@ -1,11 +1,11 @@
-typeset -A abbreviations
+declare -A expandableMap # Initialize an associative array called expandableMap
 
 als() {
   alias "$1"="$2"
 }
 
 expansion() {
-  abbreviations[$1]="$2 ^"
+  expandableMap[$1]="$2 ^"
 }
 
 snippet() {
@@ -13,18 +13,17 @@ snippet() {
   expansion "$1" "$2"
 }
 
-magic-abbrev-expand() {
-  local MATCH
-  SNIPPET=${abbreviations[$LBUFFER]}
+expand() {
+  expandable=${expandableMap[$LBUFFER]}
 
-  if [[ -n "$SNIPPET" ]]
+  if [[ -n "$expandable" ]] # If expandable is not an empty string...
   then
-    LBUFFER=${SNIPPET[(ws:^:)1]}
-    RBUFFER=${SNIPPET[(ws:^:)2]}
+    LBUFFER=${expandable[(ws:^:)1]} # Then split expandable around the first ^
+    RBUFFER=${expandable[(ws:^:)2]} # and set the buffers equal to the two parts
   else
-    zle self-insert
+    zle self-insert # Otherwise, just send a normal keypress
   fi
 }
 
-zle -N magic-abbrev-expand
-bindkey " " magic-abbrev-expand
+zle -N expand
+bindkey " " expand
