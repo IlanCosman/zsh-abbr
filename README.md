@@ -28,10 +28,6 @@ abbr syu="sudo pacman -Syu"
 abbr gca="git commit -am '^'"
 ```
 
-Use a `^` in an abbr to determine where the cursor will be placed after expansion.
+Use a `^` to determine where the cursor will be placed after expansion.
 
-```sh
-abbr s="sudo ^"
-```
-
-**Note:** Using a `^` will cause `Enter` to only expand the command, not run it. This is desirable in cases like the one above, as running `sudo` by itself would return an error.
+**Note:** Using a `^` will cause `Enter` to only expand the command, not run it.
