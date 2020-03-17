@@ -4,39 +4,32 @@ abbr() {
   local arg1=${1[(ws:=:)1]}
   local arg2=${1[(ws:=:)2]}
   
-  alias "$arg1"="$arg2" #This is done only for syntax highlighting purposes
-  
-  expandableMap[$arg1]="$arg2"
+  expandableMap[$arg1]="$arg2 ^"
 }
 
-expand() {
-  expandable=${expandableMap[$LBUFFER]}
+_expand() {
+  local expandable=${expandableMap[$LBUFFER]}
   
-  if [[ -n "$expandable" ]] ; then # If expandable is not an empty string
-    if [[ "$expandable" == *"^"* ]] ; then # If expandable contains a ^
-      LBUFFER=${expandable[(ws:^:)1]} # Then split expandable around the first ^
-      RBUFFER=${expandable[(ws:^:)2]} # and set the R/L buffers equal to the two parts
-    else
-      LBUFFER="$expandable " # If no ^, just set the left buffer equal to expandable
-      if [[ "$1" == "Enter" ]] ; then # If passed "Enter", accept the line
-        zle accept-line
-      fi
-    fi
-  else # If expandable is an empty string
-    if [[ "$1" == "Enter" ]] ; then # If passed "Enter", accept the line
-      zle accept-line
-    else
-      zle self-insert #Otherwise, send a normal keypress
-    fi
+  if [[ -z "$expandable" ]] ; then # If expandable is an empty string
+    return 1 # Nothing to expand
+  else  # If there is something to expand
+    LBUFFER=${expandable[(ws:^:)1]} # Then split expandable around the first ^
+    RBUFFER=${expandable[(ws:^:)2]} # and set the R/L buffers equal to the two parts
+    return 0 # Succesfully expanded
   fi
 }
 
-enterExpand() {
-  expand "Enter"
+_spaceExpand() {
+  _expand || zle self-insert # If expand fails, insert a space
 }
 
-zle -N expand
-zle -N enterExpand
+_enterExpand() {
+  _expand && if [[ -z "$RBUFFER" ]] ; then zle accept-line ; fi || zle accept-line 
+  # If succesfully expanded, if RBUFFER is empty then accept the line. If expand failed then accept the line.
+}
 
-bindkey " " expand
-bindkey "^M" enterExpand
+zle -N _spaceExpand
+zle -N _enterExpand
+
+bindkey " " _spaceExpand
+bindkey "^M" _enterExpand
