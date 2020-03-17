@@ -4,6 +4,8 @@ abbr() {
   local arg1=${1[(ws:=:)1]}
   local arg2=${1[(ws:=:)2]}
   
+  alias "$arg1"="$arg2" #This is done only for syntax highlighting purposes
+  
   expandableMap[$arg1]="$arg2"
 }
 
