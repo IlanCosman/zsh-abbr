@@ -30,4 +30,8 @@ abbr gca="git commit -am '^'"
 
 Use a `^` to determine where the cursor will be placed after expansion.
 
+```sh
+abbr s="sudo ^"
+```
+
 **Note:** Using a `^` will cause `Enter` to only expand the command, not run it.
