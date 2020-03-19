@@ -1,4 +1,4 @@
-declare -A expandableMap # Initialize an associative array called expandableMap
+declare -A ABBR_MAP # Initialize an associative array called ABBR_MAP
 
 abbr() {
   local arg1="${1[(ws:=:)1]}" # Split the first argument around the first = sign
@@ -6,25 +6,25 @@ abbr() {
   
   alias "$arg1=" #This is done for syntax highlighting only
   
-  expandableMap[$arg1]="$arg2"
+  ABBR_MAP[$arg1]="$arg2"
 }
 
 _expand() {
   local currentWord="${LBUFFER/* /}${RBUFFER/ */}"
-  local expandable="${expandableMap[$currentWord]}"
+  local potentialAbbr="${ABBR_MAP[$currentWord]}"
   
-  if [[ -z "$expandable" ]] ; then # If expandable is an empty string
+  if [[ -z "$potentialAbbr" ]] ; then # If potentialAbbr is an empty string
     return 0 # Nothing to expand
   else  # If there is something to expand
     zle backward-kill-word # Delete the word that's going to be replaced
     
-    LBUFFER+="${expandable[(ws:^:)1]}" # Append the first expandable ^ chunk to LBUFFER
+    LBUFFER+="${potentialAbbr[(ws:^:)1]}" # Append the first potentialAbbr ^ chunk to LBUFFER
     
-    if [[ "${expandable[(ws:^:)2]}" == "$expandable" ]] ; then # If there isn't second ^ chunk
+    if [[ "${potentialAbbr[(ws:^:)2]}" == "$potentialAbbr" ]] ; then # If there isn't second ^ chunk
       LBUFFER+=" "
       return 1 # Simple expand
     else
-      RBUFFER="${expandable[(ws:^:)2]}$RBUFFER" # Prepend the second part to RBUFFER
+      RBUFFER="${potentialAbbr[(ws:^:)2]}$RBUFFER" # Prepend the second part to RBUFFER
       return 2 # Caret expand
     fi
   fi
