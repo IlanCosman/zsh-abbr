@@ -4,7 +4,7 @@ abbr() {
   local arg1="${1[(ws:=:)1]}" # Split the first argument around the first = sign
   local arg2="${1[(ws:=:)2]}" # to mimic the syntax of alias/abbr
   
-  alias "$arg1=" #This is done for syntax highlighting only
+  alias "$arg1=" # This is done for syntax highlighting only
   
   ABBR_MAP[$arg1]="$arg2"
 }
@@ -15,8 +15,9 @@ _expand() {
   
   if [[ -z "$potentialAbbr" ]] ; then # If potentialAbbr is an empty string
     return 0 # Nothing to expand
-  else  # If there is something to expand
-    zle backward-kill-word # Delete the word that's going to be replaced
+  else  # If there is actually an abbr
+    zle backward-kill-word # Delete word before cursor
+    zle kill-word # and after cursor so that it can be replaced
     
     LBUFFER+="${potentialAbbr[(ws:^:)1]}" # Append the first potentialAbbr ^ chunk to LBUFFER
     
