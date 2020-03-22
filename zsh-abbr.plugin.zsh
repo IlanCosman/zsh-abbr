@@ -10,15 +10,12 @@ abbr() {
 }
 
 _expand() {
-  local currentWord="${LBUFFER/* /}${RBUFFER/ */}"
-  local potentialAbbr="${ABBR_MAP[$currentWord]}"
+  local potentialAbbr="${ABBR_MAP[$LBUFFER]}"
   
   if [[ -z "$potentialAbbr" ]] ; then # If potentialAbbr is an empty string i.e not an abbr
     return 0 # Nothing to expand
   else  # If potentialAbbr is an abbr
-    zle kill-word && zle backward-kill-word # Delete the whole currentWord so that it can be replaced
-    
-    LBUFFER+="${potentialAbbr[(ws:^:)1]}" # Append first potentialAbbr ^ chunk to LBUFFER
+    LBUFFER="${potentialAbbr[(ws:^:)1]}" # Append first potentialAbbr ^ chunk to LBUFFER
     
     if [[ "${potentialAbbr[(ws:^:)2]}" == "$potentialAbbr" ]] ; then # If no second ^ chunk
       LBUFFER+=" "
@@ -41,7 +38,7 @@ _spaceExpand() {
   if [[ "$expandReturnCode" == 0 ]] ; then # If expand failed
     zle self-insert # Insert space character at cursor position
     
-    ((CURSOR-=2)) # Move cursor 2 spaces to the left
+    ((CURSOR--)) # Move cursor 1 space to the left
     _expand # Try expanding again
     expandReturnCode="$?"
     
@@ -54,8 +51,6 @@ _spaceExpand() {
     elif [[ "$expandReturnCode" == 3 ]] ; then # If caret at end expand
       LBUFFER=${LBUFFER%" "}
     fi
-    
-    ((CURSOR++))
   fi
 }
 
