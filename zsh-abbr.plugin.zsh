@@ -1,12 +1,8 @@
 declare -A ABBR_MAP # Initialize associative array ABBR_MAP
 
 abbr() {
-  local arg1="${1[(ws:=:)1]}" # Split first argument around = sign
-  local arg2="${1[(ws:=:)2]}" # to mimic the syntax of alias/abbr
-  
-  alias "$arg1=" # For syntax highlighting only
-  
-  ABBR_MAP[$arg1]="$arg2"
+  alias "$1=" # For syntax highlighting only
+  ABBR_MAP[$1]="$2"
 }
 
 _expand() {
@@ -44,11 +40,11 @@ _spaceExpand() {
     
     if [[ "$expandReturnCode" == 0 ]] ; then # If expand failed
       ((CURSOR++))
-    elif [[ "$expandReturnCode" == 1 ]] ; then # If simple expand
+      elif [[ "$expandReturnCode" == 1 ]] ; then # If simple expand
       LBUFFER=${LBUFFER%" "} # Remove a space from the end of LBUFFER
-    elif [[ "$expandReturnCode" == 2 ]] ; then # If caret expand
+      elif [[ "$expandReturnCode" == 2 ]] ; then # If caret expand
       ((CURSOR--))
-    elif [[ "$expandReturnCode" == 3 ]] ; then # If caret at end expand
+      elif [[ "$expandReturnCode" == 3 ]] ; then # If caret at end expand
       LBUFFER=${LBUFFER%" "}
     fi
   fi

@@ -19,19 +19,19 @@ A Fish shell-like [abbr](https://fishshell.com/docs/current/cmds/abbr.html) comm
 ## Examples
 
 ```sh
-abbr syu="sudo pacman -Syu"
+abbr syu "sudo pacman -Syu"
 ```
 
 `Space` will expand `syu` into `sudo pacman -Syu`. `Enter` will expand and then run the command.
 
 ```sh
-abbr gca="git commit -am '^'"
+abbr gca "git commit -am '^'"
 ```
 
 Use a `^` to determine where the cursor will be placed after expansion.
 
 ```sh
-abbr s="sudo ^"
+abbr s "sudo ^"
 ```
 
 **Note:** Using a `^` will cause `Enter` to only expand the command, not run it.
