@@ -1,7 +1,7 @@
 declare -A ABBR_MAP # Initialize associative array ABBR_MAP
 
 abbr() {
-  alias "$1=" # For syntax highlighting only
+  alias "$1"="$1" # Allows abbrs to replace built-in commands. Also provides syntax highlighting
   ABBR_MAP[$1]="$2"
 }
 
@@ -11,14 +11,17 @@ _expand() {
   if [[ -z "$potentialAbbr" ]] ; then # If potentialAbbr is an empty string i.e not an abbr
     return 0 # Nothing to expand
   else  # If potentialAbbr is an abbr
-    LBUFFER="${potentialAbbr[(ws:^:)1]}" # Append first potentialAbbr ^ chunk to LBUFFER
+    local firstCaretSplitPart="${potentialAbbr[(ws:^:)1]}"
+    local secondCaretSplitPart="${potentialAbbr[(ws:^:)2]}"
     
-    if [[ "${potentialAbbr[(ws:^:)2]}" == "$potentialAbbr" ]] ; then # If no second ^ chunk
+    LBUFFER="$firstCaretSplitPart"
+    
+    if [[ "$secondCaretSplitPart" == "$potentialAbbr" ]] ; then # If no second caret chunk.
       LBUFFER+=" "
       return 1 # Simple expand
     else
-      if [[ -n "${potentialAbbr[(ws:^:)2]}" ]] ; then # If second chunk is not empty string
-        RBUFFER="${potentialAbbr[(ws:^:)2]}$RBUFFER" # Prepend second part to RBUFFER
+      if [[ -n "$secondCaretSplitPart" ]] ; then # If second chunk is not empty string
+        RBUFFER="$secondCaretSplitPart$RBUFFER" # Prepend to RBUFFER
         return 2 # Caret expand
       else
         return 3 # Caret at end expand
@@ -36,7 +39,7 @@ _spaceExpand() {
     
     ((CURSOR--)) # Move cursor 1 space to the left
     _expand # Try expanding again
-    expandReturnCode="$?"
+    local expandReturnCode="$?"
     
     if [[ "$expandReturnCode" == 0 ]] ; then # If expand failed
       ((CURSOR++))
@@ -54,7 +57,7 @@ _enterExpand() {
   _expand
   local expandReturnCode="$?"
   
-  if [[ "$expandReturnCode" != "2" ]] && [[ "$expandReturnCode" != "3" ]] ; then # If expand has no caret
+  if [[ "$expandReturnCode" != "2" ]] && [[ "$expandReturnCode" != "3" ]] ; then # If expand had no caret
     zle accept-line
   fi
 }
