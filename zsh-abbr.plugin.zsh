@@ -20,42 +20,26 @@ _expand() {
       LBUFFER+=" "
       return 1 # Simple expand
     else
-      if [[ -z "$secondCaretSplitPart" ]] ; then # If second part is an empty string 
-        return 2 # Caret-at-end expand
-      else
-        RBUFFER="$secondCaretSplitPart$RBUFFER" # Prepend to RBUFFER
-        return 3 # Caret expand
-      fi
+      RBUFFER="$secondCaretSplitPart$RBUFFER" # Prepend to RBUFFER
+      return 2 # Caret expand
     fi
   fi
 }
 
 _spaceExpand() {
   _expand
-  local expandReturnCode="$?"
+  local expandExitStatus="$?"
   
-  if [[ "$expandReturnCode" -eq 0 ]] ; then # If expand failed
+  if [[ "$expandExitStatus" -eq 0 ]] ; then # If nothing to expand
     zle self-insert # Insert space character at cursor position
-    
-    ((CURSOR--)) # Move cursor 1 space to the left
-    _expand # Try expanding again
-    local expandReturnCode="$?"
-    
-    if [[ "$expandReturnCode" -eq 0 ]] ; then # If second expand failed
-      ((CURSOR++))
-    elif [[ "$expandReturnCode" -le 2 ]] ; then # If simple/caret-at-end expand
-      LBUFFER=${LBUFFER%" "} # Remove a space from the end of LBUFFER
-    else # If caret expand
-      ((CURSOR--))
-    fi
   fi
 }
 
 _enterExpand() {
   _expand
-  local expandReturnCode="$?"
+  local expandExitStatus="$?"
   
-  if [[ "$expandReturnCode" -le 1 ]] ; then # If expand had no caret
+  if [[ "$expandExitStatus" -le 1 ]] ; then # If expand had no caret
     zle accept-line
   fi
 }
