@@ -29,7 +29,7 @@ _spaceExpand() {
   _expand
   local expandExitStatus="$?"
   
-  if [[ "$expandExitStatus" -le 1 ]] ; then # If nothing to expand
+  if [[ "$expandExitStatus" -le 1 ]] ; then # If not caret expand
     zle self-insert # Insert space character at cursor position
   fi
 }
@@ -38,7 +38,7 @@ _enterExpand() {
   _expand
   local expandExitStatus="$?"
   
-  if [[ "$expandExitStatus" -le 1 ]] ; then # If expand had no caret
+  if [[ "$expandExitStatus" -le 1 ]] ; then
     zle accept-line
   fi
 }
