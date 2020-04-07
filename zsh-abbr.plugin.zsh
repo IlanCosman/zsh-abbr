@@ -17,7 +17,6 @@ _expand() {
     LBUFFER="$firstCaretSplitPart"
     
     if [[ "$secondCaretSplitPart" == "$potentialAbbr" ]] ; then # If no second caret part.
-      LBUFFER+=" "
       return 1 # Simple expand
     else
       RBUFFER="$secondCaretSplitPart$RBUFFER" # Prepend to RBUFFER
@@ -30,7 +29,7 @@ _spaceExpand() {
   _expand
   local expandExitStatus="$?"
   
-  if [[ "$expandExitStatus" -eq 0 ]] ; then # If nothing to expand
+  if [[ "$expandExitStatus" -le 1 ]] ; then # If nothing to expand
     zle self-insert # Insert space character at cursor position
   fi
 }
